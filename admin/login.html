@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Admin - Alquimia das Páginas</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: var(--papel);
+            border: 1px solid var(--borda);
+            border-radius: var(--raio);
+            box-shadow: var(--sombra);
+            padding: 40px 35px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .login-box img {
+            height: 70px;
+            margin-bottom: 18px;
+        }
+
+        .login-box h1 {
+            font-family: var(--titulo);
+            font-size: 1.8rem;
+            color: var(--primaria-escura);
+            margin-bottom: 6px;
+        }
+
+        .login-box .subtitulo {
+            color: var(--suave);
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+        }
+
+        .campo {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--texto);
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--corpo);
+            background: #fff;
+            color: var(--texto);
+        }
+
+        .campo input:focus {
+            outline: none;
+            border-color: var(--destaque);
+        }
+
+        .btn-entrar {
+            width: 100%;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .voltar-site {
+            display: inline-block;
+            margin-top: 22px;
+            color: var(--suave);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .voltar-site:hover {
+            color: var(--destaque);
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <img src="../css/logoalquimia.png" alt="Alquimia das Páginas">
+    <h1>Área Administrativa</h1>
+    <p class="subtitulo">Acesso restrito ao sebo</p>
+
+    <form action="painel.html" method="get">
+        <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+        </div>
+
+        <div class="campo">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-primario btn-entrar">Entrar</button>
+    </form>
+
+    <a href="../index.html" class="voltar-site">← Voltar ao site</a>
+</div>
+
+</body>
+</html>
