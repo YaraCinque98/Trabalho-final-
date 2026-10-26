@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- fundo circular creme -->
+  <circle cx="100" cy="100" r="96" fill="#fffaf3" stroke="#e0d2bf" stroke-width="3"/>
+  <!-- livro aberto -->
+  <path d="M100 55 C78 55 52 62 42 72 L42 145 C55 132 78 128 100 128 C122 128 145 132 158 145 L158 72 C148 62 122 55 100 55 Z" fill="#6b3e26"/>
+  <!-- páginas esquerda -->
+  <path d="M100 62 C82 62 60 68 50 76 L50 138 C62 128 82 124 100 124 Z" fill="#f7f0e6"/>
+  <!-- páginas direita -->
+  <path d="M100 62 C118 62 140 68 150 76 L150 138 C138 128 118 124 100 124 Z" fill="#fff8ef"/>
+  <!-- lombada / vinco -->
+  <path d="M100 62 L100 124" stroke="#c4783a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- linhas de texto esquerda -->
+  <path d="M58 88 H88 M58 98 H85 M58 108 H82" stroke="#c4a574" stroke-width="2" stroke-linecap="round"/>
+  <!-- linhas de texto direita -->
+  <path d="M112 88 H142 M115 98 H142 M118 108 H142" stroke="#c4a574" stroke-width="2" stroke-linecap="round"/>
+  <!-- xícara de chá (aconchego) -->
+  <ellipse cx="100" cy="158" rx="18" ry="6" fill="#e8d5bc"/>
+  <path d="M85 150 Q85 140 100 140 Q115 140 115 150" fill="#fffaf3" stroke="#6b3e26" stroke-width="2"/>
+  <path d="M115 145 Q125 145 125 152 Q125 158 115 156" fill="none" stroke="#6b3e26" stroke-width="2"/>
+  <!-- vapor -->
+  <path d="M94 136 Q92 130 96 126 M100 134 Q102 128 98 124 M106 136 Q108 130 104 126" fill="none" stroke="#c4783a" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+</svg>

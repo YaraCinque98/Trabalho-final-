@@ -1,0 +1,418 @@
+/* ===== Alquimia das Páginas - Visual Retrô / Vintage ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Cinzel:wght@500;600&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --fundo: #f2e8d5;
+    --papel: #faf3e6;
+    --texto: #2a1f14;
+    --suave: #5c4a38;
+    --primaria: #5c2e1f;
+    --primaria-escura: #3b1c12;
+    --destaque: #8b3a2a;
+    --destaque-hover: #a34b38;
+    --dourado: #b08d57;
+    --borda: #d9c7a7;
+    --whatsapp: #25d366;
+    --sombra: 0 8px 30px rgba(43, 24, 12, 0.12);
+    --sombra-hover: 0 16px 40px rgba(43, 24, 12, 0.18);
+    --raio: 12px;
+    --titulo: 'Cormorant Garamond', Georgia, serif;
+    --display: 'Cinzel', serif;
+    --corpo: 'Source Sans 3', system-ui, sans-serif;
+    --trans: 0.25s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--corpo);
+    color: var(--texto);
+    line-height: 1.7;
+    min-height: 100vh;
+    background-color: var(--fundo);
+    background-image:
+        radial-gradient(ellipse at top, rgba(139, 58, 42, 0.06), transparent 55%),
+        radial-gradient(ellipse at bottom, rgba(59, 28, 18, 0.05), transparent 50%);
+}
+
+.container {
+    width: min(1160px, 92%);
+    margin-inline: auto;
+}
+
+/* ===== TOPO ===== */
+.topo {
+    background: rgba(250, 243, 230, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--borda);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.topo-conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    gap: 24px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 70px;
+    display: block;
+}
+
+nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--suave);
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color var(--trans);
+}
+
+nav a:hover,
+nav a.ativo {
+    color: var(--destaque);
+}
+
+/* ===== HERO ===== */
+.hero {
+    position: relative;
+    text-align: center;
+    padding: 100px 0 90px;
+    background: linear-gradient(180deg, rgba(59, 28, 18, 0.88), rgba(59, 28, 18, 0.78));
+    color: #faf3e6;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.25));
+    pointer-events: none;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-ornamento {
+    font-family: var(--display);
+    color: var(--dourado);
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 16px;
+    opacity: 0.9;
+}
+
+.hero h1 {
+    font-family: var(--titulo);
+    font-size: clamp(2.6rem, 5.5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 18px;
+    color: #faf3e6;
+}
+
+.hero h1 span {
+    display: block;
+    font-style: italic;
+    font-weight: 500;
+    opacity: 0.95;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 32px;
+    opacity: 0.88;
+    color: #e8d9c4;
+}
+
+.btn-primario {
+    display: inline-block;
+    background: var(--destaque);
+    color: #faf3e6;
+    text-decoration: none;
+    padding: 14px 34px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: all var(--trans);
+}
+
+.btn-primario:hover {
+    background: var(--destaque-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(139, 58, 42, 0.35);
+}
+
+/* ===== SEÇÕES ===== */
+.secao {
+    padding: 70px 0;
+}
+
+.secao-titulo {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.secao-titulo .ornamento {
+    color: var(--dourado);
+    font-family: var(--display);
+    font-size: 0.9rem;
+    letter-spacing: 0.28em;
+    margin-bottom: 10px;
+}
+
+.secao-titulo h2 {
+    font-family: var(--titulo);
+    font-size: 2.3rem;
+    color: var(--primaria-escura);
+    font-weight: 600;
+}
+
+/* ===== GRID DE LIVROS ===== */
+.grid-livros {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+.card-livro {
+    background: var(--papel);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    transition: all var(--trans);
+}
+
+.card-livro:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--sombra-hover);
+    border-color: #cbb48a;
+}
+
+.capa {
+    aspect-ratio: 2/3;
+    background: linear-gradient(160deg, #e8d9c4, #d4c2a5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.capa::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(43, 24, 12, 0.12), transparent 40%);
+    pointer-events: none;
+}
+
+.capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sem-capa {
+    color: var(--suave);
+    font-family: var(--titulo);
+    font-size: 1.05rem;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.info {
+    padding: 18px 16px 22px;
+    text-align: center;
+}
+
+.info h3 {
+    font-family: var(--titulo);
+    font-size: 1.2rem;
+    color: var(--primaria-escura);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.autor {
+    color: var(--suave);
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+    font-style: italic;
+}
+
+.btn-secundario {
+    display: inline-block;
+    color: var(--destaque);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
+    transition: all var(--trans);
+}
+
+.btn-secundario:hover {
+    border-bottom-color: var(--destaque);
+    color: var(--primaria-escura);
+}
+
+/* ===== DETALHE DO LIVRO ===== */
+.detalhe-livro {
+    padding: 70px 0;
+}
+
+.detalhe-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+.capa-grande {
+    background: linear-gradient(160deg, #e8d9c4, #d4c2a5);
+    border-radius: var(--raio);
+    aspect-ratio: 2/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--sombra);
+}
+
+.info-livro h1 {
+    font-family: var(--titulo);
+    font-size: 2.5rem;
+    color: var(--primaria-escura);
+    margin-bottom: 8px;
+    line-height: 1.15;
+}
+
+.info-livro .autor {
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+}
+
+.preco {
+    font-family: var(--display);
+    font-size: 1.45rem;
+    color: var(--destaque);
+    margin: 16px 0;
+}
+
+.descricao {
+    color: var(--suave);
+    margin: 22px 0 28px;
+    line-height: 1.8;
+    max-width: 520px;
+}
+
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--whatsapp);
+    color: white;
+    text-decoration: none;
+    padding: 14px 26px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all var(--trans);
+}
+
+.btn-whatsapp:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+}
+
+.voltar {
+    display: inline-block;
+    margin-top: 26px;
+    color: var(--suave);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.voltar:hover {
+    color: var(--destaque);
+}
+
+/* ===== RODAPÉ ===== */
+.rodape {
+    background: var(--primaria-escura);
+    color: #d9c7a7;
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 40px;
+}
+
+.rodape p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+}
+
+.logo-rodape {
+    height: 55px;
+    margin-bottom: 14px;
+    opacity: 0.9;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+    .topo-conteudo {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .logo img {
+        height: 58px;
+    }
+
+    nav {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 75px 0 65px;
+    }
+
+    .detalhe-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .capa-grande {
+        max-width: 250px;
+        margin: 0 auto;
+    }
+}
