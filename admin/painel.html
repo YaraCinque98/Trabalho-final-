@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin | Alquimia das Páginas</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        .admin-header {
+            background: var(--papel);
+            border-bottom: 1px solid var(--borda);
+            padding: 16px 0;
+        }
+
+        .admin-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .admin-header strong {
+            font-family: var(--display);
+            font-size: 1.15rem;
+            color: var(--primaria-escura);
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .admin-nav a {
+            text-decoration: none;
+            color: var(--suave);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.ativo {
+            color: var(--destaque);
+        }
+
+        .btn-sair {
+            background: var(--primaria);
+            color: #faf3e6 !important;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .btn-sair:hover {
+            background: var(--primaria-escura);
+        }
+
+        .painel-conteudo {
+            padding: 50px 0 80px;
+        }
+
+        .painel-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .painel-topo h1 {
+            font-family: var(--titulo);
+            font-size: 2rem;
+            color: var(--primaria-escura);
+            margin: 0;
+        }
+
+        .tabela-box {
+            background: var(--papel);
+            border: 1px solid var(--borda);
+            border-radius: var(--raio);
+            box-shadow: var(--sombra);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--primaria);
+            color: #faf3e6;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--borda);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(139, 58, 42, 0.04);
+        }
+
+        .aviso-vazio {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--suave);
+        }
+
+        @media (max-width: 768px) {
+            .admin-header .container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            th, td {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="admin-header">
+    <div class="container">
+        <strong>Painel Administrativo</strong>
+        <nav class="admin-nav">
+            <a href="painel.html" class="ativo">Livros</a>
+            <a href="login.html" class="btn-sair">Sair</a>
+        </nav>
+    </div>
+</header>
+
+<main class="painel-conteudo">
+    <div class="container">
+        <div class="painel-topo">
+            <h1>Livros Cadastrados</h1>
+            <span style="color: var(--suave);">Total: <strong>4</strong> livros</span>
+        </div>
+
+        <div class="tabela-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Dom Casmurro</td>
+                        <td>Machado de Assis</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>O Cortiço</td>
+                        <td>Aluísio Azevedo</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Capitães da Areia</td>
+                        <td>Jorge Amado</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Memórias Póstumas</td>
+                        <td>Machado de Assis</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
