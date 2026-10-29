@@ -1,0 +1,22 @@
+{
+  "name": "alquimia-das-paginas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site e API do sebo Alquimia das Páginas",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "create-admin": "node scripts/create-admin.js",
+    "create-admin:demo": "node scripts/create-admin.js --demo"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.12.0"
+  }
+}
