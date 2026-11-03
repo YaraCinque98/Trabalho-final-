@@ -1,5 +1,4 @@
-/* ===== Alquimia das Páginas - Visual Retrô / Vintage ===== */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Cinzel:wght@500;600&family=Source+Sans+3:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -8,37 +7,51 @@
 }
 
 :root {
-    --fundo: #f2e8d5;
-    --papel: #faf3e6;
-    --texto: #2a1f14;
-    --suave: #5c4a38;
-    --primaria: #5c2e1f;
-    --primaria-escura: #3b1c12;
-    --destaque: #8b3a2a;
-    --destaque-hover: #a34b38;
-    --dourado: #b08d57;
-    --borda: #d9c7a7;
-    --whatsapp: #25d366;
-    --sombra: 0 8px 30px rgba(43, 24, 12, 0.12);
-    --sombra-hover: 0 16px 40px rgba(43, 24, 12, 0.18);
-    --raio: 12px;
+    --fundo: #fbf7f2;
+    --papel: #fffdfa;
+    --texto: #302523;
+    --suave: #786964;
+    --primaria: #702b3a;
+    --primaria-escura: #4a1926;
+    --destaque: #984451;
+    --destaque-hover: #7d3040;
+    --dourado: #c39b61;
+    --borda: #e8ddd3;
+    --whatsapp: #168b57;
+    --sombra: 0 12px 35px rgba(67, 31, 37, .08);
+    --sombra-hover: 0 20px 48px rgba(67, 31, 37, .15);
+    --raio: 18px;
     --titulo: 'Cormorant Garamond', Georgia, serif;
-    --display: 'Cinzel', serif;
-    --corpo: 'Source Sans 3', system-ui, sans-serif;
-    --trans: 0.25s ease;
+    --corpo: 'DM Sans', system-ui, sans-serif;
+    --trans: .22s ease;
 }
 
-html { scroll-behavior: smooth; }
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
 
 body {
-    font-family: var(--corpo);
-    color: var(--texto);
-    line-height: 1.7;
     min-height: 100vh;
-    background-color: var(--fundo);
-    background-image:
-        radial-gradient(ellipse at top, rgba(139, 58, 42, 0.06), transparent 55%),
-        radial-gradient(ellipse at bottom, rgba(59, 28, 18, 0.05), transparent 50%);
+    background:
+        radial-gradient(ellipse at 92% 8%, rgba(195, 155, 97, .09), transparent 25rem),
+        var(--fundo);
+    color: var(--texto);
+    font-family: var(--corpo);
+    line-height: 1.65;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 3px solid #d29e58;
+    outline-offset: 3px;
 }
 
 .container {
@@ -46,373 +59,847 @@ body {
     margin-inline: auto;
 }
 
-/* ===== TOPO ===== */
 .topo {
-    background: rgba(250, 243, 230, 0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--borda);
     position: sticky;
-    top: 0;
     z-index: 100;
+    top: 0;
+    background: rgba(255, 253, 250, .96);
+    border-bottom: 1px solid rgba(112, 43, 58, .12);
+    backdrop-filter: blur(14px);
 }
 
 .topo-conteudo {
     display: flex;
+    min-height: 86px;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
-    gap: 24px;
+    gap: 25px;
 }
 
 .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    text-decoration: none;
+    flex: 0 0 auto;
 }
 
 .logo img {
-    height: 70px;
     display: block;
+    width: auto;
+    height: 66px;
 }
 
-nav {
+.topo nav {
     display: flex;
-    gap: 32px;
     align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 3vw, 38px);
 }
 
-nav a {
-    text-decoration: none;
+.topo nav a {
+    position: relative;
     color: var(--suave);
-    font-size: 0.92rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: .87rem;
+    font-weight: 600;
+    letter-spacing: .045em;
+    text-decoration: none;
     transition: color var(--trans);
 }
 
-nav a:hover,
-nav a.ativo {
-    color: var(--destaque);
+.topo nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -7px;
+    left: 0;
+    height: 2px;
+    background: var(--destaque);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--trans);
 }
 
-/* ===== HERO ===== */
+.topo nav a:hover, .topo nav a.ativo {
+    color: var(--primaria);
+}
+
+.topo nav a:hover::after, .topo nav a.ativo::after {
+    transform: scaleX(1);
+}
+
+.topo-whatsapp, .btn-primario, .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border: 0;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background var(--trans), box-shadow var(--trans), transform var(--trans);
+}
+
+.topo-whatsapp {
+    flex: 0 0 auto;
+    padding: 11px 17px;
+    background: #e8f4ec;
+    color: #17613e;
+    font-size: .84rem;
+}
+
+.topo-whatsapp:hover {
+    background: #d7eddf;
+    transform: translateY(-2px);
+}
+
+.icone {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    fill: currentColor;
+}
+
 .hero {
     position: relative;
-    text-align: center;
-    padding: 100px 0 90px;
-    background: linear-gradient(180deg, rgba(59, 28, 18, 0.88), rgba(59, 28, 18, 0.78));
-    color: #faf3e6;
     overflow: hidden;
+    padding: clamp(72px, 10vw, 130px) 0 clamp(80px, 10vw, 130px);
+    background:
+        radial-gradient(ellipse at 82% 15%, rgba(232, 194, 146, .2), transparent 25rem),
+        linear-gradient(125deg, #451824 0%, #702b3a 58%, #8d3c4b 100%);
+    color: #fffaf5;
+    isolation: isolate;
+}
+
+.hero::before, .hero::after {
+    position: absolute;
+    z-index: -1;
+    border: 1px solid rgba(255, 239, 218, .12);
+    border-radius: 50%;
+    content: "";
 }
 
 .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.25));
-    pointer-events: none;
+    top: -210px;
+    right: -80px;
+    width: 560px;
+    height: 560px;
+}
+
+.hero::after {
+    top: -140px;
+    right: -10px;
+    width: 420px;
+    height: 420px;
 }
 
 .hero .container {
     position: relative;
     z-index: 1;
+    max-width: 860px;
+    text-align: center;
+}
+
+.hero-ornamento, .eyebrow {
+    color: #e3c18d;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
 }
 
 .hero-ornamento {
-    font-family: var(--display);
-    color: var(--dourado);
-    font-size: 1rem;
-    letter-spacing: 0.3em;
-    margin-bottom: 16px;
-    opacity: 0.9;
+    margin-bottom: 17px;
 }
 
 .hero h1 {
-    font-family: var(--titulo);
-    font-size: clamp(2.6rem, 5.5vw, 4rem);
-    font-weight: 600;
-    line-height: 1.1;
     margin-bottom: 18px;
-    color: #faf3e6;
+    color: #fffaf5;
+    font-family: var(--titulo);
+    font-size: clamp(3.2rem, 8vw, 6.1rem);
+    font-weight: 600;
+    line-height: .96;
 }
 
 .hero h1 span {
     display: block;
+    color: #efcf9d;
     font-style: italic;
     font-weight: 500;
-    opacity: 0.95;
 }
 
 .hero p {
-    font-size: 1.1rem;
-    max-width: 500px;
-    margin: 0 auto 32px;
-    opacity: 0.88;
-    color: #e8d9c4;
+    max-width: 580px;
+    margin: 0 auto 30px;
+    color: rgba(255, 250, 245, .83);
+    font-size: clamp(1rem, 2vw, 1.16rem);
+}
+
+.hero-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
 }
 
 .btn-primario {
-    display: inline-block;
-    background: var(--destaque);
-    color: #faf3e6;
-    text-decoration: none;
-    padding: 14px 34px;
-    border-radius: 4px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    transition: all var(--trans);
+    padding: 14px 25px;
+    background: #f0d7b1;
+    color: #4a1926;
+    cursor: pointer;
+    font-size: .92rem;
 }
 
 .btn-primario:hover {
-    background: var(--destaque-hover);
+    background: #ffe8c7;
+    box-shadow: 0 9px 24px rgba(24, 9, 14, .2);
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(139, 58, 42, 0.35);
 }
 
-/* ===== SEÇÕES ===== */
+.btn-primario-outline {
+    border: 1px solid rgba(255, 250, 245, .38);
+    background: rgba(255, 255, 255, .07);
+    color: #fffaf5;
+}
+
+.btn-primario-outline:hover {
+    background: rgba(255, 255, 255, .15);
+}
+
+.faixa-editorial {
+    border-bottom: 1px solid var(--borda);
+    background: var(--papel);
+}
+
+.faixa-editorial .container {
+    display: flex;
+    min-height: 76px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--suave);
+    font-size: .91rem;
+    text-align: center;
+}
+
+.faixa-editorial .icone {
+    color: var(--destaque);
+}
+
 .secao {
-    padding: 70px 0;
+    padding: clamp(58px, 8vw, 94px) 0;
 }
 
 .secao-titulo {
+    max-width: 680px;
+    margin: 0 auto 38px;
     text-align: center;
-    margin-bottom: 45px;
 }
 
 .secao-titulo .ornamento {
-    color: var(--dourado);
-    font-family: var(--display);
-    font-size: 0.9rem;
-    letter-spacing: 0.28em;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
+    color: var(--destaque);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
 }
 
-.secao-titulo h2 {
-    font-family: var(--titulo);
-    font-size: 2.3rem;
+.secao-titulo h2, .sobre-sebo h2, .contato-sebo h2 {
     color: var(--primaria-escura);
+    font-family: var(--titulo);
+    font-size: clamp(2.35rem, 5vw, 3.35rem);
     font-weight: 600;
+    line-height: 1.05;
 }
 
-/* ===== GRID DE LIVROS ===== */
+.secao-titulo p {
+    margin-top: 12px;
+    color: var(--suave);
+}
+
 .grid-livros {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 24px;
 }
 
 .card-livro {
-    background: var(--papel);
+    overflow: hidden;
     border: 1px solid var(--borda);
     border-radius: var(--raio);
-    overflow: hidden;
-    box-shadow: var(--sombra);
-    transition: all var(--trans);
+    background: var(--papel);
+    box-shadow: 0 7px 22px rgba(67, 31, 37, .045);
+    transition: border-color var(--trans), box-shadow var(--trans), transform var(--trans);
 }
 
 .card-livro:hover {
-    transform: translateY(-8px);
+    border-color: rgba(112, 43, 58, .35);
     box-shadow: var(--sombra-hover);
-    border-color: #cbb48a;
+    transform: translateY(-6px);
+}
+
+.card-livro-link {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
 }
 
 .capa {
-    aspect-ratio: 2/3;
-    background: linear-gradient(160deg, #e8d9c4, #d4c2a5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
+    display: grid;
+    overflow: hidden;
+    aspect-ratio: 3 / 3.7;
+    place-items: center;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, .45), transparent 52%),
+        linear-gradient(145deg, #ead9ca, #d7c1ad);
 }
 
 .capa::after {
-    content: "";
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(43, 24, 12, 0.12), transparent 40%);
+    inset: 45% 0 0;
+    background: linear-gradient(transparent, rgba(38, 17, 22, .13));
+    content: "";
     pointer-events: none;
 }
 
-.capa img {
+.capa img, .capa-grande img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.sem-capa {
-    color: var(--suave);
+.capa .sem-capa {
+    max-width: 80%;
+    color: var(--primaria);
     font-family: var(--titulo);
-    font-size: 1.05rem;
-    font-style: italic;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.12;
     text-align: center;
-    padding: 20px;
 }
 
 .info {
-    padding: 18px 16px 22px;
-    text-align: center;
+    display: flex;
+    min-height: 195px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 18px 20px;
 }
 
 .info h3 {
-    font-family: var(--titulo);
-    font-size: 1.2rem;
+    margin-bottom: 2px;
     color: var(--primaria-escura);
-    margin-bottom: 6px;
-    line-height: 1.3;
+    font-family: var(--titulo);
+    font-size: 1.48rem;
+    font-weight: 700;
+    line-height: 1.08;
 }
 
 .autor {
+    margin: 5px 0 10px;
     color: var(--suave);
-    font-size: 0.92rem;
-    margin-bottom: 14px;
-    font-style: italic;
+    font-size: .88rem;
+}
+
+.info > p:not(.autor):not(.preco) {
+    color: var(--suave);
+    font-size: .8rem;
+}
+
+.preco {
+    margin: auto 0 5px;
+    padding-top: 13px;
+    color: var(--destaque);
+    font-size: 1.08rem;
+    font-weight: 700;
 }
 
 .btn-secundario {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
     color: var(--destaque);
+    cursor: pointer;
+    font-size: .83rem;
+    font-weight: 700;
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    border-bottom: 1px solid transparent;
-    transition: all var(--trans);
+    transition: color var(--trans);
 }
 
 .btn-secundario:hover {
-    border-bottom-color: var(--destaque);
     color: var(--primaria-escura);
 }
 
-/* ===== DETALHE DO LIVRO ===== */
+.secao-link {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.secao-link a:not(.btn-whatsapp) {
+    color: var(--destaque);
+    font-weight: 700;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+.aviso-livros {
+    margin: 24px 0;
+    color: var(--suave);
+    text-align: center;
+}
+
+.passos-compra {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 20px;
+    list-style: none;
+}
+
+.passos-compra li {
+    padding: 24px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    background: var(--papel);
+    box-shadow: 0 7px 22px rgba(67, 31, 37, .045);
+}
+
+.passo-numero {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    background: #f0e5dc;
+    color: var(--primaria);
+    font-weight: 700;
+    place-items: center;
+}
+
+.passos-compra h3 {
+    margin-bottom: 7px;
+    color: var(--primaria-escura);
+    font-family: var(--titulo);
+    font-size: 1.45rem;
+    line-height: 1.1;
+}
+
+.passos-compra p {
+    color: var(--suave);
+    font-size: .92rem;
+}
+
+.sobre-sebo {
+    overflow: hidden;
+    padding: clamp(48px, 7vw, 76px) 0;
+    background: #f0e5dc;
+}
+
+.sobre-sebo .container {
+    display: grid;
+    grid-template-columns: auto minmax(0, 700px);
+    align-items: center;
+    justify-content: center;
+    gap: clamp(24px, 5vw, 58px);
+}
+
+.sobre-icone {
+    display: grid;
+    width: 118px;
+    height: 118px;
+    border: 1px solid rgba(112, 43, 58, .2);
+    border-radius: 50%;
+    background: rgba(255, 253, 250, .7);
+    color: var(--destaque);
+    place-items: center;
+}
+
+.sobre-icone .icone {
+    width: 48px;
+    height: 48px;
+}
+
+.sobre-sebo h2 {
+    margin: 5px 0 10px;
+}
+
+.sobre-sebo p:last-child {
+    max-width: 650px;
+    color: var(--suave);
+}
+
+.contato-sebo {
+    padding: clamp(52px, 8vw, 82px) 0;
+    background: #fffdfa;
+    text-align: center;
+}
+
+.contato-sebo .icone-grande {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 9px;
+    color: var(--whatsapp);
+}
+
+.contato-sebo h2 {
+    margin-bottom: 9px;
+}
+
+.contato-sebo p {
+    margin: 0 auto 21px;
+    color: var(--suave);
+}
+
+.btn-whatsapp {
+    padding: 13px 23px;
+    background: var(--whatsapp);
+    color: #fff;
+    font-size: .92rem;
+}
+
+.btn-whatsapp:hover {
+    background: #0f7347;
+    box-shadow: 0 8px 20px rgba(22, 139, 87, .22);
+    transform: translateY(-2px);
+}
+
+.whatsapp-flutuante {
+    position: fixed;
+    z-index: 90;
+    right: 22px;
+    bottom: 22px;
+    display: grid;
+    width: 58px;
+    height: 58px;
+    border: 3px solid var(--fundo);
+    border-radius: 50%;
+    background: var(--whatsapp);
+    box-shadow: 0 7px 22px rgba(15, 72, 48, .3);
+    color: #fff;
+    place-items: center;
+    transition: transform var(--trans), background var(--trans);
+}
+
+.whatsapp-flutuante:hover {
+    background: #0f7347;
+    transform: translateY(-3px) scale(1.04);
+}
+
+.whatsapp-flutuante .icone {
+    width: 28px;
+    height: 28px;
+}
+
+.rodape {
+    padding: 42px 0 30px;
+    background: var(--primaria-escura);
+    color: #f1e4dc;
+    text-align: center;
+}
+
+.rodape-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-rodape {
+    width: auto;
+    height: 56px;
+    margin-bottom: 13px;
+    border-radius: 50%;
+}
+
+.rodape p {
+    margin: 3px 0;
+    color: rgba(255, 250, 245, .74);
+    font-size: .9rem;
+}
+
+.rodape .rodape-contato {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 12px 0;
+    color: #d8b27b;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rodape .rodape-contato:hover {
+    color: #f0d7b1;
+}
+
+.filtros-livros {
+    display: grid;
+    grid-template-columns: auto minmax(180px, 1fr) auto minmax(180px, .75fr);
+    align-items: center;
+    gap: 12px;
+    max-width: 870px;
+    margin: 0 auto 34px;
+    padding: 18px;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    background: var(--papel);
+    box-shadow: 0 6px 20px rgba(67, 31, 37, .04);
+}
+
+.filtros-livros label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--primaria-escura);
+    font-size: .87rem;
+    font-weight: 700;
+}
+
+.filtros-livros input, .filtros-livros select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--texto);
+}
+
 .detalhe-livro {
-    padding: 70px 0;
+    padding: clamp(45px, 8vw, 82px) 0;
 }
 
 .detalhe-grid {
     display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 50px;
+    grid-template-columns: minmax(220px, 340px) minmax(0, 1fr);
     align-items: start;
+    gap: clamp(28px, 6vw, 68px);
 }
 
 .capa-grande {
-    background: linear-gradient(160deg, #e8d9c4, #d4c2a5);
+    display: grid;
+    overflow: hidden;
+    aspect-ratio: 3 / 3.8;
+    border: 1px solid var(--borda);
     border-radius: var(--raio);
-    aspect-ratio: 2/3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(145deg, #ead9ca, #d7c1ad);
     box-shadow: var(--sombra);
+    place-items: center;
+}
+
+.capa-grande .sem-capa {
+    max-width: 80%;
+    color: var(--primaria);
+    font-family: var(--titulo);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.info-livro {
+    padding-top: 8px;
 }
 
 .info-livro h1 {
-    font-family: var(--titulo);
-    font-size: 2.5rem;
+    margin: 6px 0 5px;
     color: var(--primaria-escura);
-    margin-bottom: 8px;
-    line-height: 1.15;
+    font-family: var(--titulo);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 600;
+    line-height: 1;
 }
 
 .info-livro .autor {
-    font-size: 1.1rem;
-    margin-bottom: 14px;
+    margin: 0 0 20px;
+    font-size: 1.08rem;
 }
 
-.preco {
-    font-family: var(--display);
-    font-size: 1.45rem;
-    color: var(--destaque);
-    margin: 16px 0;
-}
-
-.descricao {
+.info-livro > p:not(.autor):not(.preco) {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--borda);
     color: var(--suave);
-    margin: 22px 0 28px;
-    line-height: 1.8;
-    max-width: 520px;
 }
 
-.btn-whatsapp {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--whatsapp);
-    color: white;
-    text-decoration: none;
-    padding: 14px 26px;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: all var(--trans);
+.info-livro .preco {
+    margin: 14px 0 22px;
+    font-size: 1.65rem;
 }
 
-.btn-whatsapp:hover {
-    filter: brightness(1.08);
-    transform: translateY(-2px);
-}
-
-.voltar {
-    display: inline-block;
-    margin-top: 26px;
-    color: var(--suave);
-    text-decoration: none;
-    font-size: 0.95rem;
-}
-
-.voltar:hover {
+.info-livro .voltar {
+    display: block;
+    width: fit-content;
+    margin-top: 20px;
     color: var(--destaque);
+    font-size: .9rem;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-/* ===== RODAPÉ ===== */
-.rodape {
-    background: var(--primaria-escura);
-    color: #d9c7a7;
+.info-livro .voltar:hover {
+    color: var(--primaria-escura);
+}
+
+.vazio {
+    padding: 35px 0;
+    color: var(--suave);
     text-align: center;
-    padding: 40px 0;
-    margin-top: 40px;
 }
 
-.rodape p {
-    margin: 6px 0;
-    font-size: 0.95rem;
-}
-
-.logo-rodape {
-    height: 55px;
-    margin-bottom: 14px;
-    opacity: 0.9;
-}
-
-/* ===== RESPONSIVO ===== */
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .topo-conteudo {
-        flex-direction: column;
-        gap: 12px;
+        min-height: 74px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px 20px;
+        padding: 8px 0 12px;
     }
 
     .logo img {
-        height: 58px;
+        height: 55px;
     }
 
-    nav {
-        gap: 18px;
-        flex-wrap: wrap;
+    .topo nav {
+        order: 3;
+        width: 100%;
         justify-content: center;
+        gap: clamp(10px, 4vw, 25px);
+        padding: 3px 0;
     }
 
+    .topo nav a {
+        font-size: .76rem;
+    }
+
+    .topo-whatsapp {
+        padding: 9px 12px;
+        font-size: .76rem;
+    }
+
+    .topo-whatsapp .icone {
+        width: 18px;
+        height: 18px;
+    }
+
+    .sobre-sebo .container {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .sobre-icone {
+        width: 86px;
+        height: 86px;
+    }
+
+    .sobre-icone .icone {
+        width: 37px;
+        height: 37px;
+    }
+}
+
+@media (max-width: 560px) {
     .hero {
-        padding: 75px 0 65px;
+        padding: 74px 0 82px;
+    }
+
+    .hero h1 {
+        font-size: clamp(3rem, 15vw, 4.4rem);
+    }
+
+    .hero-acoes {
+        align-items: stretch;
+        flex-direction: column;
+        width: min(100%, 300px);
+        margin-inline: auto;
+    }
+
+    .faixa-editorial .container {
+        padding: 12px 0;
+        font-size: .84rem;
+    }
+
+    .grid-livros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px;
+    }
+
+    .card-livro {
+        border-radius: 13px;
+    }
+
+    .info {
+        min-height: 175px;
+        padding: 13px 12px 15px;
+    }
+
+    .info h3 {
+        font-size: 1.22rem;
+    }
+
+    .autor {
+        font-size: .8rem;
+    }
+
+    .info > p:not(.autor):not(.preco) {
+        font-size: .73rem;
+    }
+
+    .filtros-livros {
+        grid-template-columns: 1fr;
+        gap: 7px;
+        padding: 15px;
+    }
+
+    .filtros-livros label:not(:first-child) {
+        margin-top: 8px;
     }
 
     .detalhe-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
     }
 
     .capa-grande {
-        max-width: 250px;
+        width: min(74%, 270px);
         margin: 0 auto;
+    }
+
+    .whatsapp-flutuante {
+        right: 15px;
+        bottom: 15px;
+        width: 54px;
+        height: 54px;
+    }
+}
+
+@media (max-width: 360px) {
+    .topo-conteudo {
+        gap: 4px 10px;
+    }
+
+    .logo img {
+        height: 47px;
+    }
+
+    .topo-whatsapp {
+        padding: 8px 10px;
+    }
+
+    .topo-whatsapp span {
+        max-width: 90px;
+        font-size: .7rem;
+    }
+
+    .grid-livros {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
     }
 }
