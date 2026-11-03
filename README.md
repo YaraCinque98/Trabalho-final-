@@ -64,7 +64,8 @@ No XAMPP, basta manter o serviço MySQL ligado; o Apache não é necessário par
 - O painel permite entrar, listar, cadastrar, editar e excluir livros.
 - A autenticação usa `pessoa` + `administrador`; somente administradores com `senha_hash` bcrypt podem entrar.
 - A exclusão de livros referenciados em `movimentacao` é recusada pelo próprio banco e exibida no painel.
-- Os botões de WhatsApp estão nas páginas públicas. Para direcioná-los diretamente ao número do sebo, preencha `WHATSAPP` em `js/dados.js` com DDI + DDD + número, sem `+` ou espaços (por exemplo, `5511999999999`). Sem número configurado, o link abre o WhatsApp com a mensagem pronta para escolher o destinatário.
+- O site não tem carrinho, checkout nem pagamento online. O cliente consulta o catálogo e combina disponibilidade, pagamento e retirada/entrega diretamente com o sebo pelo WhatsApp.
+- Os botões de WhatsApp estão nas páginas públicas e, nos detalhes do livro, a mensagem já inclui o título e o preço. Para direcioná-los diretamente ao número do sebo, preencha `WHATSAPP` em `js/dados.js` com DDI + DDD + número, sem `+` ou espaços (por exemplo, `5511999999999`). Sem número configurado, o link abre o WhatsApp com a mensagem pronta para escolher o destinatário.
 
 A tabela `livro` fornecida não possui coluna de sinopse/descrição; por isso, o site apresenta os campos que existem no banco. As tabelas de clientes, endereços, movimentações e pagamentos ainda não são usadas por estas telas.
 

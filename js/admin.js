@@ -1,175 +1,223 @@
 (function () {
-  const ADMIN_EMAIL = 'admin@alquimia.local';
-  const ADMIN_SENHA = 'admin123';
-
-  const telaLogin = document.getElementById('telaLogin');
-  const telaPainel = document.getElementById('telaPainel');
   const formLogin = document.getElementById('formLogin');
-  const loginErro = document.getElementById('loginErro');
-  const btnSair = document.getElementById('btnSair');
-  const abaLista = document.getElementById('abaLista');
-  const abaForm = document.getElementById('abaForm');
   const formLivro = document.getElementById('formLivro');
-  const tbody = document.querySelector('#tabelaLivros tbody');
-  const selectAssunto = document.getElementById('assunto');
 
-  function logado() {
-    return sessionStorage.getItem('alquimia_admin') === '1';
-  }
+  if (formLogin) {
+    const erro = document.getElementById('loginErro');
+    Alquimia.request('/api/admin/sessao')
+      .then(sessao => {
+        if (sessao.autenticado) window.location.replace('painel.html');
+      })
+      .catch(error => {
+        erro.textContent = error.message;
+        erro.hidden = false;
+      });
 
-  function mostrarPainel() {
-    telaLogin.hidden = true;
-    telaPainel.hidden = false;
-    preencherAssuntos();
-    renderTabela();
-  }
-
-  function mostrarLogin() {
-    telaLogin.hidden = false;
-    telaPainel.hidden = true;
-    sessionStorage.removeItem('alquimia_admin');
-  }
-
-  if (logado()) mostrarPainel();
-
-  formLogin.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const senha = document.getElementById('senha').value;
-    if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
-      sessionStorage.setItem('alquimia_admin', '1');
-      loginErro.hidden = true;
-      mostrarPainel();
-    } else {
-      loginErro.textContent = 'E-mail ou senha incorretos.';
-      loginErro.hidden = false;
-    }
-  });
-
-  btnSair.addEventListener('click', mostrarLogin);
-
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
-      btn.classList.add('ativo');
-      const aba = btn.getAttribute('data-aba');
-      abaLista.hidden = aba !== 'lista';
-      abaForm.hidden = aba !== 'form';
-      if (aba === 'form' && !document.getElementById('livroId').value) {
-        formLivro.reset();
-        document.getElementById('livroId').value = '';
-        document.getElementById('formTitulo').textContent = 'Novo livro';
+    formLogin.addEventListener('submit', async event => {
+      event.preventDefault();
+      const botao = formLogin.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      erro.hidden = true;
+      try {
+        await Alquimia.request('/api/admin/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            senha: document.getElementById('senha').value
+          })
+        });
+        window.location.assign('painel.html');
+      } catch (error) {
+        erro.textContent = error.message;
+        erro.hidden = false;
+      } finally {
+        botao.disabled = false;
       }
     });
-  });
+    return;
+  }
 
-  document.getElementById('btnNovo').addEventListener('click', function () {
+  if (!formLivro) return;
+
+  const painel = document.getElementById('painel');
+  const aviso = document.getElementById('avisoPainel');
+  const avisoInicial = document.getElementById('avisoInicial');
+  const tbody = document.querySelector('#tabelaLivros tbody');
+  const selectAssunto = document.getElementById('assunto');
+  const btnSair = document.getElementById('btnSair');
+  let livros = [];
+
+  function mostrarAviso(mensagem) {
+    aviso.textContent = mensagem;
+    aviso.hidden = !mensagem;
+  }
+
+  async function carregarSessao() {
+    const sessao = await Alquimia.request('/api/admin/sessao');
+    if (!sessao.autenticado) {
+      window.location.replace('login.html');
+      return false;
+    }
+    painel.hidden = false;
+    return true;
+  }
+
+  async function carregarAssuntos() {
+    const assuntos = await Alquimia.request('/api/assuntos');
+    selectAssunto.replaceChildren();
+    assuntos.forEach(assunto => {
+      const option = document.createElement('option');
+      option.value = assunto.id;
+      option.textContent = assunto.nome;
+      selectAssunto.appendChild(option);
+    });
+    if (!assuntos.length) {
+      mostrarAviso('Cadastre ao menos um assunto na tabela assunto antes de incluir livros.');
+    }
+  }
+
+  async function carregarLivros() {
+    livros = await Alquimia.request('/api/admin/livros');
+    tbody.replaceChildren();
+    if (!livros.length) {
+      const linha = document.createElement('tr');
+      const celula = document.createElement('td');
+      celula.colSpan = 7;
+      celula.textContent = 'Nenhum livro cadastrado.';
+      linha.appendChild(celula);
+      tbody.appendChild(linha);
+      return;
+    }
+    livros.forEach(livro => {
+      const linha = document.createElement('tr');
+      const valores = [
+        livro.id,
+        livro.nome,
+        livro.autor,
+        livro.assunto,
+        Alquimia.formatarPreco(livro.preco),
+        livro.status
+      ];
+      valores.forEach(valor => {
+        const celula = document.createElement('td');
+        celula.textContent = valor == null ? '—' : String(valor);
+        linha.appendChild(celula);
+      });
+
+      const acoes = document.createElement('td');
+      acoes.className = 'acoes';
+      const editar = document.createElement('button');
+      editar.type = 'button';
+      editar.className = 'btn-secundario';
+      editar.textContent = 'Editar';
+      editar.addEventListener('click', () => editarLivro(livro));
+      const excluir = document.createElement('button');
+      excluir.type = 'button';
+      excluir.className = 'btn-secundario';
+      excluir.textContent = 'Excluir';
+      excluir.addEventListener('click', () => excluirLivro(livro));
+      acoes.append(editar, excluir);
+      linha.appendChild(acoes);
+      tbody.appendChild(linha);
+    });
+  }
+
+  function novoLivro() {
     formLivro.reset();
     document.getElementById('livroId').value = '';
     document.getElementById('formTitulo').textContent = 'Novo livro';
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
-    document.querySelector('[data-aba="form"]').classList.add('ativo');
-    abaLista.hidden = true;
-    abaForm.hidden = false;
-  });
-
-  document.getElementById('btnCancelar').addEventListener('click', function () {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
-    document.querySelector('[data-aba="lista"]').classList.add('ativo');
-    abaForm.hidden = true;
-    abaLista.hidden = false;
-  });
-
-  function preencherAssuntos() {
-    selectAssunto.innerHTML = '';
-    ASSUNTOS_PADRAO.forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a;
-      opt.textContent = a;
-      selectAssunto.appendChild(opt);
-    });
+    formLivro.hidden = false;
+    document.getElementById('nome').focus();
+    mostrarAviso('');
   }
 
-  function renderTabela() {
-    const livros = carregarLivros();
-    tbody.innerHTML = '';
-    livros.forEach(l => {
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td>' + l.nome + '</td>' +
-        '<td>' + l.autor + '</td>' +
-        '<td>' + l.assunto + '</td>' +
-        '<td>' + formatarPreco(l.preco) + '</td>' +
-        '<td class="acoes">' +
-          '<button type="button" class="btn btn-outline btn-sm" data-editar="' + l.id + '">Editar</button>' +
-          '<button type="button" class="btn btn-danger btn-sm" data-excluir="' + l.id + '">Excluir</button>' +
-        '</td>';
-      tbody.appendChild(tr);
-    });
-
-    tbody.querySelectorAll('[data-editar]').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const id = Number(btn.getAttribute('data-editar'));
-        const l = carregarLivros().find(x => Number(x.id) === id);
-        if (!l) return;
-        document.getElementById('livroId').value = l.id;
-        document.getElementById('nome').value = l.nome;
-        document.getElementById('autor').value = l.autor;
-        document.getElementById('assunto').value = l.assunto;
-        document.getElementById('edicao').value = l.edicao || '';
-        document.getElementById('editora').value = l.editora || '';
-        document.getElementById('ano').value = l.ano || '';
-        document.getElementById('preco').value = String(l.preco).replace('.', ',');
-        document.getElementById('status').value = l.status || 'disponivel';
-        document.getElementById('descricao').value = l.descricao || '';
-        document.getElementById('formTitulo').textContent = 'Editar livro';
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
-        document.querySelector('[data-aba="form"]').classList.add('ativo');
-        abaLista.hidden = true;
-        abaForm.hidden = false;
-      });
-    });
-
-    tbody.querySelectorAll('[data-excluir]').forEach(btn => {
-      btn.addEventListener('click', function () {
-        if (!confirm('Excluir este livro?')) return;
-        const id = Number(btn.getAttribute('data-excluir'));
-        const lista = carregarLivros().filter(x => Number(x.id) !== id);
-        salvarLivros(lista);
-        renderTabela();
-      });
-    });
+  function editarLivro(livro) {
+    document.getElementById('livroId').value = livro.id;
+    document.getElementById('nome').value = livro.nome;
+    document.getElementById('autor').value = livro.autor;
+    document.getElementById('assunto').value = livro.id_assunto;
+    document.getElementById('edicao').value = livro.edicao || '';
+    document.getElementById('editora').value = livro.editora || '';
+    document.getElementById('ano').value = livro.ano || '';
+    document.getElementById('preco').value = livro.preco;
+    document.getElementById('status').value = livro.status;
+    document.getElementById('capa').value = livro.capa || '';
+    document.getElementById('formTitulo').textContent = 'Editar livro';
+    formLivro.hidden = false;
+    document.getElementById('nome').focus();
+    mostrarAviso('');
   }
 
-  formLivro.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const lista = carregarLivros();
-    const idAtual = document.getElementById('livroId').value;
-    const precoStr = document.getElementById('preco').value.replace(',', '.');
+  async function excluirLivro(livro) {
+    if (!window.confirm(`Excluir "${livro.nome}"?`)) return;
+    try {
+      await Alquimia.request('/api/admin/livros/' + livro.id, { method: 'DELETE' });
+      mostrarAviso('Livro excluído.');
+      await carregarLivros();
+    } catch (error) {
+      mostrarAviso(error.message);
+    }
+  }
+
+  document.getElementById('btnNovo').addEventListener('click', novoLivro);
+  document.getElementById('btnCancelar').addEventListener('click', () => {
+    formLivro.reset();
+    formLivro.hidden = true;
+    mostrarAviso('');
+  });
+
+  formLivro.addEventListener('submit', async event => {
+    event.preventDefault();
+    const id = document.getElementById('livroId').value;
     const dados = {
-      id: idAtual ? Number(idAtual) : (lista.reduce((m, l) => Math.max(m, Number(l.id)), 0) + 1),
-      nome: document.getElementById('nome').value.trim(),
-      autor: document.getElementById('autor').value.trim(),
-      assunto: document.getElementById('assunto').value,
-      edicao: document.getElementById('edicao').value.trim(),
-      editora: document.getElementById('editora').value.trim(),
-      ano: Number(document.getElementById('ano').value) || null,
-      preco: parseFloat(precoStr) || 0,
+      nome: document.getElementById('nome').value,
+      autor: document.getElementById('autor').value,
+      id_assunto: Number(selectAssunto.value),
+      edicao: document.getElementById('edicao').value,
+      editora: document.getElementById('editora').value,
+      ano: document.getElementById('ano').value || null,
+      preco: Number(document.getElementById('preco').value),
       status: document.getElementById('status').value,
-      descricao: document.getElementById('descricao').value.trim()
+      capa: document.getElementById('capa').value
     };
 
-    if (idAtual) {
-      const i = lista.findIndex(x => Number(x.id) === Number(idAtual));
-      if (i >= 0) lista[i] = dados;
-    } else {
-      lista.push(dados);
+    try {
+      await Alquimia.request(id ? '/api/admin/livros/' + id : '/api/admin/livros', {
+        method: id ? 'PUT' : 'POST',
+        body: JSON.stringify(dados)
+      });
+      formLivro.reset();
+      formLivro.hidden = true;
+      mostrarAviso('Livro salvo com sucesso.');
+      await carregarLivros();
+    } catch (error) {
+      mostrarAviso(error.message);
     }
-    salvarLivros(lista);
-    renderTabela();
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
-    document.querySelector('[data-aba="lista"]').classList.add('ativo');
-    abaForm.hidden = true;
-    abaLista.hidden = false;
   });
+
+  btnSair.addEventListener('click', async () => {
+    btnSair.disabled = true;
+    try {
+      await Alquimia.request('/api/admin/logout', { method: 'POST', body: '{}' });
+      window.location.replace('login.html');
+    } catch (error) {
+      mostrarAviso(error.message);
+      btnSair.disabled = false;
+    }
+  });
+
+  carregarSessao()
+    .then(autenticado => {
+      if (!autenticado) return null;
+      return Promise.all([carregarAssuntos(), carregarLivros()]);
+    })
+    .catch(error => {
+      if (painel.hidden) {
+        avisoInicial.textContent = error.message;
+        avisoInicial.hidden = false;
+      } else {
+        mostrarAviso(error.message);
+      }
+      console.error('Falha ao carregar o painel administrativo.', error);
+    });
 })();
