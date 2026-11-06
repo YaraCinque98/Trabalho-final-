@@ -96,6 +96,8 @@
         livro.autor,
         livro.assunto,
         Alquimia.formatarPreco(livro.preco),
+        livro.em_promocao ? 'Sim' : 'Não',
+        livro.destaque_semana ? 'Sim' : 'Não',
         livro.status
       ];
       valores.forEach(valor => {
@@ -126,6 +128,9 @@
     formLivro.reset();
     document.getElementById('livroId').value = '';
     document.getElementById('formTitulo').textContent = 'Novo livro';
+    document.getElementById('emPromocao').checked = false;
+    document.getElementById('destaqueSemana').checked = false;
+    document.getElementById('precoPromocao').value = '';
     formLivro.hidden = false;
     document.getElementById('nome').focus();
     mostrarAviso('');
@@ -141,6 +146,9 @@
     document.getElementById('ano').value = livro.ano || '';
     document.getElementById('preco').value = livro.preco;
     document.getElementById('status').value = livro.status;
+    document.getElementById('precoPromocao').value = livro.preco_promocao ?? '';
+    document.getElementById('emPromocao').checked = Boolean(livro.em_promocao);
+    document.getElementById('destaqueSemana').checked = Boolean(livro.destaque_semana);
     document.getElementById('capa').value = livro.capa || '';
     document.getElementById('formTitulo').textContent = 'Editar livro';
     formLivro.hidden = false;
@@ -169,6 +177,9 @@
   formLivro.addEventListener('submit', async event => {
     event.preventDefault();
     const id = document.getElementById('livroId').value;
+    const emPromocao = document.getElementById('emPromocao').checked;
+    const destaqueSemana = document.getElementById('destaqueSemana').checked;
+    const precoPromocaoValor = document.getElementById('precoPromocao').value;
     const dados = {
       nome: document.getElementById('nome').value,
       autor: document.getElementById('autor').value,
@@ -178,7 +189,10 @@
       ano: document.getElementById('ano').value || null,
       preco: Number(document.getElementById('preco').value),
       status: document.getElementById('status').value,
-      capa: document.getElementById('capa').value
+      capa: document.getElementById('capa').value,
+      em_promocao: emPromocao,
+      destaque_semana: destaqueSemana,
+      preco_promocao: emPromocao ? (precoPromocaoValor === '' ? null : Number(precoPromocaoValor)) : null
     };
 
     try {

@@ -1,13 +1,24 @@
 (function () {
-  const grid = document.getElementById('livrosGrid') || document.getElementById('livrosDestaque');
-  if (!grid) return;
+  const grids = [...document.querySelectorAll('#livrosGrid, #livrosDestaque, #livrosPromocao')];
+  if (!grids.length) return;
 
   const busca = document.getElementById('busca');
   const filtro = document.getElementById('filtroAssunto');
   const aviso = document.getElementById('avisoLivros');
-  const destaques = grid.id === 'livrosDestaque';
+  const assuntoInicial = new URLSearchParams(window.location.search).get('assunto');
   let temporizador;
   let requisicaoAtual = 0;
+
+  function mostrarEstadoVazio(container, tipo) {
+    const mensagem = tipo === 'destaque'
+      ? 'Ainda não há achados da semana por aqui.'
+      : 'Ainda não há livros em promoção no momento.';
+
+    const estado = document.createElement('div');
+    estado.className = 'vazio-grid';
+    estado.textContent = mensagem;
+    container.replaceChildren(estado);
+  }
 
   function criarCard(livro) {
     const card = document.createElement('article');
@@ -26,7 +37,18 @@
     autor.textContent = livro.autor;
     const preco = document.createElement('p');
     preco.className = 'preco';
-    preco.textContent = Alquimia.formatarPreco(livro.preco);
+    const temPromocao = Boolean(livro.em_promocao) && livro.preco_promocao != null && Number(livro.preco_promocao) >= 0;
+    if (temPromocao) {
+      const precoAntes = document.createElement('span');
+      precoAntes.className = 'preco-antigo';
+      precoAntes.textContent = Alquimia.formatarPreco(livro.preco);
+      const precoAtual = document.createElement('span');
+      precoAtual.className = 'preco-atual';
+      precoAtual.textContent = Alquimia.formatarPreco(livro.preco_promocao);
+      preco.append(precoAntes, precoAtual);
+    } else {
+      preco.textContent = Alquimia.formatarPreco(livro.preco);
+    }
     const assunto = document.createElement('p');
     assunto.textContent = livro.assunto;
     const ver = document.createElement('span');
@@ -58,19 +80,45 @@
     }
 
     try {
-      const parametros = new URLSearchParams();
-      if (destaques) {
-        parametros.set('limite', '4');
-      } else {
-        if (busca && busca.value.trim()) parametros.set('busca', busca.value.trim());
-        if (filtro && filtro.value) parametros.set('assunto', filtro.value);
+      const destaqueGrid = document.getElementById('livrosDestaque');
+      const promocaoGrid = document.getElementById('livrosPromocao');
+
+      if (destaqueGrid || promocaoGrid) {
+        const [livrosDestaque, livrosPromocao] = await Promise.all([
+          destaqueGrid ? Alquimia.request('/api/livros?destaque=1&limite=4') : Promise.resolve([]),
+          promocaoGrid ? Alquimia.request('/api/livros?promocao=1&limite=4') : Promise.resolve([])
+        ]);
+        if (numeroRequisicao !== requisicaoAtual) return;
+        if (destaqueGrid) {
+          if (livrosDestaque.length) {
+            destaqueGrid.replaceChildren(...livrosDestaque.map(criarCard));
+          } else {
+            mostrarEstadoVazio(destaqueGrid, 'destaque');
+          }
+        }
+        if (promocaoGrid) {
+          if (livrosPromocao.length) {
+            promocaoGrid.replaceChildren(...livrosPromocao.map(criarCard));
+          } else {
+            mostrarEstadoVazio(promocaoGrid, 'promocao');
+          }
+        }
+        return;
       }
+
+      const parametros = new URLSearchParams();
+      if (busca && busca.value.trim()) parametros.set('busca', busca.value.trim());
+      if (filtro && filtro.value) parametros.set('assunto', filtro.value);
       const queryString = parametros.toString();
       const query = queryString ? '?' + queryString : '';
       const livros = await Alquimia.request('/api/livros' + query);
       if (numeroRequisicao !== requisicaoAtual) return;
-      grid.replaceChildren(...livros.map(criarCard));
-      if (!destaques && aviso) {
+
+      const gridCatalogo = document.getElementById('livrosGrid');
+      if (gridCatalogo) {
+        gridCatalogo.replaceChildren(...livros.map(criarCard));
+      }
+      if (aviso) {
         aviso.hidden = livros.length > 0;
         aviso.textContent = livros.length ? '' : 'Nenhum livro disponível encontrado.';
       }
@@ -85,14 +133,24 @@
   }
 
   if (filtro) {
-    carregarAssuntos().catch(error => {
-      if (aviso) {
-        aviso.hidden = false;
-        aviso.textContent = error.message;
-      }
-      console.error('Falha ao carregar os assuntos.', error);
-    });
+    carregarAssuntos()
+      .then(() => {
+        if (assuntoInicial) {
+          filtro.value = assuntoInicial;
+        }
+        carregarLivros();
+      })
+      .catch(error => {
+        if (aviso) {
+          aviso.hidden = false;
+          aviso.textContent = error.message;
+        }
+        console.error('Falha ao carregar os assuntos.', error);
+      });
+  } else {
+    carregarLivros();
   }
+
   if (busca) {
     busca.addEventListener('input', () => {
       clearTimeout(temporizador);
@@ -100,5 +158,4 @@
     });
   }
   if (filtro) filtro.addEventListener('change', carregarLivros);
-  carregarLivros();
 })();
