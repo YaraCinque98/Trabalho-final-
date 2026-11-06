@@ -8,13 +8,15 @@
     <style>
         .admin-header { background:var(--papel); border-bottom:1px solid var(--borda); padding:16px 0; }
         .admin-header .container,.painel-topo { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
-        .admin-header strong { font-family:var(--display); font-size:1.15rem; color:var(--primaria-escura); }
+        .admin-header strong { font-family:var(--titulo); font-size:1.3rem; color:var(--primaria-escura); }
         .admin-nav { display:flex; gap:16px; align-items:center; }
         .admin-nav a { color:var(--suave); text-decoration:none; }
         .btn-sair { background:var(--primaria); color:#faf3e6 !important; padding:8px 16px; border-radius:6px; border:0; cursor:pointer; font:inherit; }
         .painel-conteudo { padding:40px 0 80px; }
-        .painel-topo { margin-bottom:24px; }
-        .painel-topo h1 { font-family:var(--titulo); font-size:2rem; color:var(--primaria-escura); margin:0; }
+        .painel-topo { margin-bottom:18px; }
+        .painel-topo h1 { font-family:var(--titulo); font-size:2.5rem; color:var(--primaria-escura); margin:0; }
+        .painel-topo .ornamento { margin-bottom:8px; color:var(--destaque); font-size:.75rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
+        .subtitulo-admin { color:var(--suave); margin:0 0 18px; }
         .tabela-box { background:var(--papel); border:1px solid var(--borda); border-radius:var(--raio); box-shadow:var(--sombra); overflow:auto; }
         table { width:100%; border-collapse:collapse; }
         thead { background:var(--primaria); color:#faf3e6; }
@@ -23,6 +25,8 @@
         .campo { margin-bottom:16px; }
         .campo label { display:block; font-weight:600; margin-bottom:6px; }
         .campo input,.campo select { width:100%; padding:11px 12px; border:1px solid var(--borda); border-radius:7px; font:inherit; background:#fff; }
+        .checkbox-campo label { display:flex; align-items:center; gap:10px; margin-top:18px; }
+        .checkbox-campo input { width:auto; margin:0; }
         .form-livro { background:var(--papel); border:1px solid var(--borda); border-radius:var(--raio); padding:24px; margin-bottom:28px; }
         .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:0 18px; }
         .acoes { display:flex; gap:8px; }
@@ -48,9 +52,13 @@
 <main class="painel-conteudo" id="painel" hidden>
     <div class="container">
         <div class="painel-topo">
-            <h1>Livros cadastrados</h1>
+            <div>
+                <div class="ornamento">ACERVO DO SEBO</div>
+                <h1>Controle do catálogo</h1>
+            </div>
             <button type="button" class="btn-primario" id="btnNovo">Novo livro</button>
         </div>
+        <p class="subtitulo-admin">Cadastre, edite e mantenha o acervo do sebo sempre organizado e visível para os clientes.</p>
         <p id="avisoPainel" class="mensagem" role="status" hidden></p>
 
         <form id="formLivro" class="form-livro" hidden>
@@ -82,7 +90,7 @@
                     <input id="ano" type="number" min="0" max="9999">
                 </div>
                 <div class="campo">
-                    <label for="preco">Preço (R$)</label>
+                    <label for="preco">Preço real do livro (R$)</label>
                     <input id="preco" type="number" min="0" max="99999999.99" step="0.01" required>
                 </div>
                 <div class="campo">
@@ -95,8 +103,18 @@
                     </select>
                 </div>
                 <div class="campo">
-                    <label for="capa">Capa (caminho ou URL)</label>
-                    <input id="capa" maxlength="255">
+                    <label for="precoPromocao">Valor promocional (R$)</label>
+                    <input id="precoPromocao" type="number" min="0" max="99999999.99" step="0.01" placeholder="Opcional">
+                </div>
+                <div class="campo checkbox-campo">
+                    <label><input type="checkbox" id="emPromocao"> Em promoção</label>
+                </div>
+                <div class="campo checkbox-campo">
+                    <label><input type="checkbox" id="destaqueSemana"> Destaque da semana</label>
+                </div>
+                <div class="campo">
+                    <label for="capa">Capa da imagem (URL da foto da capa)</label>
+                    <input id="capa" maxlength="255" placeholder="https://exemplo.com/capa-do-livro.jpg">
                 </div>
             </div>
             <button type="submit" class="btn-primario">Salvar livro</button>
@@ -106,7 +124,7 @@
         <div class="tabela-box">
             <table id="tabelaLivros">
                 <thead>
-                    <tr><th>ID</th><th>Título</th><th>Autor</th><th>Assunto</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
+                    <tr><th>ID</th><th>Título</th><th>Autor</th><th>Assunto</th><th>Preço</th><th>Promo</th><th>Destaque</th><th>Status</th><th>Ações</th></tr>
                 </thead>
                 <tbody></tbody>
             </table>

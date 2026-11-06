@@ -7,19 +7,21 @@
 }
 
 :root {
-    --fundo: #fbf7f2;
-    --papel: #fffdfa;
-    --texto: #302523;
-    --suave: #786964;
-    --primaria: #702b3a;
-    --primaria-escura: #4a1926;
-    --destaque: #984451;
-    --destaque-hover: #7d3040;
-    --dourado: #c39b61;
-    --borda: #e8ddd3;
-    --whatsapp: #168b57;
-    --sombra: 0 12px 35px rgba(67, 31, 37, .08);
-    --sombra-hover: 0 20px 48px rgba(67, 31, 37, .15);
+    --fundo: #efe4d8;
+    --papel: #fffaf5;
+    --texto: #2a1d1d;
+    --suave: #67514d;
+    --primaria: #4f1d2d;
+    --primaria-escura: #2c1118;
+    --destaque: #6c2434;
+    --destaque-hover: #541e2a;
+    --dourado: #c8a15d;
+    --borda: #d9c2ab;
+    --verde: #243f36;
+    --verde-claro: #2f5147;
+    --whatsapp: #1d6d4d;
+    --sombra: 0 14px 36px rgba(35, 19, 22, .09);
+    --sombra-hover: 0 22px 52px rgba(31, 19, 24, .14);
     --raio: 18px;
     --titulo: 'Cormorant Garamond', Georgia, serif;
     --corpo: 'DM Sans', system-ui, sans-serif;
@@ -34,8 +36,8 @@ html {
 body {
     min-height: 100vh;
     background:
-        radial-gradient(ellipse at 92% 8%, rgba(195, 155, 97, .09), transparent 25rem),
-        var(--fundo);
+        radial-gradient(ellipse at 90% 8%, rgba(200, 161, 93, .18), transparent 28rem),
+        linear-gradient(180deg, #f7efe8 0%, #eee1d3 100%);
     color: var(--texto);
     font-family: var(--corpo);
     line-height: 1.65;
@@ -63,8 +65,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     position: sticky;
     z-index: 100;
     top: 0;
-    background: rgba(255, 253, 250, .96);
-    border-bottom: 1px solid rgba(112, 43, 58, .12);
+    background: rgba(255, 250, 242, .94);
+    border-bottom: 1px solid rgba(91, 45, 39, .12);
     backdrop-filter: blur(14px);
 }
 
@@ -111,7 +113,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     bottom: -7px;
     left: 0;
     height: 2px;
-    background: var(--destaque);
+    background: var(--dourado);
     content: "";
     transform: scaleX(0);
     transform-origin: left;
@@ -164,8 +166,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     overflow: hidden;
     padding: clamp(72px, 10vw, 130px) 0 clamp(80px, 10vw, 130px);
     background:
-        radial-gradient(ellipse at 82% 15%, rgba(232, 194, 146, .2), transparent 25rem),
-        linear-gradient(125deg, #451824 0%, #702b3a 58%, #8d3c4b 100%);
+        radial-gradient(ellipse at 82% 15%, rgba(200, 161, 93, .2), transparent 25rem),
+        linear-gradient(125deg, #2b1118 0%, #4f1d2d 48%, #294a3f 100%);
     color: #fffaf5;
     isolation: isolate;
 }
@@ -243,14 +245,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .btn-primario {
     padding: 14px 25px;
-    background: #f0d7b1;
-    color: #4a1926;
+    background: linear-gradient(180deg, #d9b776, #c29a59);
+    color: #2b1118;
     cursor: pointer;
     font-size: .92rem;
+    box-shadow: 0 6px 18px rgba(50, 31, 21, .18);
 }
 
 .btn-primario:hover {
-    background: #ffe8c7;
+    background: linear-gradient(180deg, #e2c486, #cf9f51);
     box-shadow: 0 9px 24px rgba(24, 9, 14, .2);
     transform: translateY(-2px);
 }
@@ -282,7 +285,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .faixa-editorial .icone {
-    color: var(--destaque);
+    color: var(--verde);
 }
 
 .secao {
@@ -327,13 +330,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     overflow: hidden;
     border: 1px solid var(--borda);
     border-radius: var(--raio);
-    background: var(--papel);
-    box-shadow: 0 7px 22px rgba(67, 31, 37, .045);
+    background: linear-gradient(180deg, #fffdf9, #f3e7db);
+    box-shadow: 0 8px 22px rgba(53, 32, 29, .06);
     transition: border-color var(--trans), box-shadow var(--trans), transform var(--trans);
 }
 
 .card-livro:hover {
-    border-color: rgba(112, 43, 58, .35);
+    border-color: rgba(91, 45, 39, .4);
     box-shadow: var(--sombra-hover);
     transform: translateY(-6px);
 }
@@ -409,8 +412,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .preco {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     margin: auto 0 5px;
     padding-top: 13px;
+    color: var(--destaque);
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+
+.preco-antigo {
+    color: var(--suave);
+    font-size: .72rem;
+    font-weight: 500;
+    text-decoration: line-through;
+}
+
+.preco-atual {
     color: var(--destaque);
     font-size: 1.08rem;
     font-weight: 700;
@@ -446,9 +466,93 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     text-underline-offset: 4px;
 }
 
+.secao-comemorativa {
+    background: linear-gradient(180deg, rgba(240, 229, 220, .45), rgba(255, 255, 255, 0));
+}
+
+.cards-comemorativas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 22px;
+}
+
+.card-comemorativa {
+    padding: 26px 22px 24px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    box-shadow: 0 7px 22px rgba(67, 31, 37, .04);
+}
+
+.card-rosa {
+    background: linear-gradient(180deg, #fff4f6, #fffdfb);
+}
+
+.card-dourada {
+    background: linear-gradient(180deg, #fff9ee, #fffdfb);
+}
+
+.card-terracota {
+    background: linear-gradient(180deg, #fdf5f0, #fffdfb);
+}
+
+.badge {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(112, 43, 58, .08);
+    color: var(--primaria);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.card-comemorativa h3 {
+    margin-bottom: 10px;
+    color: var(--primaria-escura);
+    font-family: var(--titulo);
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    line-height: 1.05;
+}
+
+.card-comemorativa p {
+    color: var(--suave);
+    margin-bottom: 18px;
+}
+
+.card-comemorativa a {
+    color: var(--destaque);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.card-comemorativa a:hover {
+    color: var(--primaria-escura);
+}
+
+.card-promocao .capa {
+    background: linear-gradient(145deg, #f4d8be, #e5c4a0);
+}
+
+.card-promocao .sem-capa {
+    font-size: 1.2rem;
+}
+
 .aviso-livros {
     margin: 24px 0;
     color: var(--suave);
+    text-align: center;
+}
+
+.vazio-grid {
+    grid-column: 1 / -1;
+    padding: 28px 22px;
+    border: 1px dashed rgba(91, 45, 39, .24);
+    border-radius: var(--raio);
+    background: rgba(255, 250, 244, .6);
+    color: var(--suave);
+    font-size: .96rem;
     text-align: center;
 }
 
@@ -631,6 +735,57 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .rodape .rodape-contato:hover {
     color: #f0d7b1;
+}
+
+.catalogo-principal {
+    padding-top: 36px;
+}
+
+.catalogo-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(230px, .8fr);
+    align-items: end;
+    gap: 24px;
+    margin: 0 auto 30px;
+    padding: 28px 24px;
+    border: 1px solid var(--borda);
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(240, 229, 220, .85), rgba(255, 253, 250, .95));
+    box-shadow: 0 10px 28px rgba(67, 31, 37, .04);
+}
+
+.catalogo-intro .ornamento {
+    margin-bottom: 8px;
+    color: var(--destaque);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.catalogo-intro h1 {
+    color: var(--primaria-escura);
+    font-family: var(--titulo);
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    line-height: .98;
+}
+
+.catalogo-callout {
+    padding: 20px 18px;
+    border-left: 4px solid var(--dourado);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .8);
+}
+
+.catalogo-callout strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--primaria-escura);
+}
+
+.catalogo-callout p {
+    color: var(--suave);
+    font-size: .9rem;
 }
 
 .filtros-livros {

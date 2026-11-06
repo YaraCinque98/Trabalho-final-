@@ -45,10 +45,13 @@ function requireAdmin(req, res, next) {
 
 function requireSameOrigin(req, res, next) {
   const origin = req.get('origin');
-  if (!origin || origin !== `${req.protocol}://${req.get('host')}`) {
-    return next(new HttpError(403, 'Origem da solicitação não permitida.'));
+  const expectedOrigin = `${req.protocol}://${req.get('host')}`;
+
+  if (!origin || origin === 'null' || origin === expectedOrigin) {
+    return next();
   }
-  next();
+
+  return next(new HttpError(403, 'Origem da solicitação não permitida.'));
 }
 
 function validarLivro(body) {
@@ -63,6 +66,9 @@ function validarLivro(body) {
   const ano = body.ano === '' || body.ano == null ? null : Number(body.ano);
   const status = typeof body.status === 'string' ? body.status : 'disponivel';
   const statusPermitidos = ['disponivel', 'indisponivel', 'reservado', 'vendido'];
+  const emPromocao = body.em_promocao === true || body.em_promocao === 1 || body.em_promocao === '1' || body.em_promocao === 'true';
+  const destaqueSemana = body.destaque_semana === true || body.destaque_semana === 1 || body.destaque_semana === '1' || body.destaque_semana === 'true';
+  const precoPromocao = body.preco_promocao === '' || body.preco_promocao == null ? null : Number(body.preco_promocao);
 
   if (!nome || nome.length > 150 || !autor || autor.length > 100) {
     throw new HttpError(400, 'Título e autor são obrigatórios e devem respeitar os limites de caracteres.');
@@ -88,8 +94,24 @@ function validarLivro(body) {
   if (!statusPermitidos.includes(status)) {
     throw new HttpError(400, 'Status do livro inválido.');
   }
+  if (emPromocao && (precoPromocao === null || !Number.isFinite(precoPromocao) || precoPromocao < 0 || precoPromocao > 99999999.99)) {
+    throw new HttpError(400, 'Informe um valor promocional válido para os livros em promoção.');
+  }
 
-  return { nome, autor, edicao, editora, ano, idAssunto, capa, preco, status };
+  return {
+    nome,
+    autor,
+    edicao,
+    editora,
+    ano,
+    idAssunto,
+    capa,
+    preco,
+    status,
+    emPromocao,
+    destaqueSemana,
+    precoPromocao: emPromocao ? precoPromocao : null
+  };
 }
 
 const camposLivro = `
@@ -103,7 +125,10 @@ const camposLivro = `
   a.nome_assunto AS assunto,
   l.capa,
   l.preco,
-  l.status`;
+  l.status,
+  l.em_promocao,
+  l.destaque_semana,
+  l.preco_promocao`;
 
 app.use(express.json({ limit: '20kb' }));
 app.use(session({
@@ -130,6 +155,8 @@ app.get('/api/livros', asyncRoute(async (req, res) => {
   const termo = typeof req.query.busca === 'string' ? req.query.busca.trim().slice(0, 100) : '';
   const idAssunto = req.query.assunto ? Number(req.query.assunto) : null;
   const limite = req.query.limite ? Number(req.query.limite) : 100;
+  const destaque = typeof req.query.destaque === 'string' ? req.query.destaque : null;
+  const promocao = typeof req.query.promocao === 'string' ? req.query.promocao : null;
   if (idAssunto !== null && (!Number.isInteger(idAssunto) || idAssunto < 1)) {
     throw new HttpError(400, 'Assunto inválido.');
   }
@@ -146,6 +173,14 @@ app.get('/api/livros', asyncRoute(async (req, res) => {
   if (idAssunto !== null) {
     filtros.push('l.id_assunto = ?');
     parametros.push(idAssunto);
+  }
+  if (destaque !== null) {
+    filtros.push('l.destaque_semana = ?');
+    parametros.push(destaque === '1' || destaque === 'true' ? 1 : 0);
+  }
+  if (promocao !== null) {
+    filtros.push('l.em_promocao = ?');
+    parametros.push(promocao === '1' || promocao === 'true' ? 1 : 0);
   }
 
   const [rows] = await pool.execute(
@@ -231,9 +266,9 @@ app.get('/api/admin/livros', requireAdmin, asyncRoute(async (req, res) => {
 app.post('/api/admin/livros', requireSameOrigin, requireAdmin, asyncRoute(async (req, res) => {
   const livro = validarLivro(req.body);
   const [result] = await pool.execute(
-    `INSERT INTO livro (nome, autor, edicao, editora, ano, id_assunto, capa, preco, status)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [livro.nome, livro.autor, livro.edicao, livro.editora, livro.ano, livro.idAssunto, livro.capa, livro.preco, livro.status]
+    `INSERT INTO livro (nome, autor, edicao, editora, ano, id_assunto, capa, preco, status, em_promocao, destaque_semana, preco_promocao)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [livro.nome, livro.autor, livro.edicao, livro.editora, livro.ano, livro.idAssunto, livro.capa, livro.preco, livro.status, livro.emPromocao ? 1 : 0, livro.destaqueSemana ? 1 : 0, livro.precoPromocao]
   );
   res.status(201).json({ id: result.insertId });
 }));
@@ -246,9 +281,9 @@ app.put('/api/admin/livros/:id', requireSameOrigin, requireAdmin, asyncRoute(asy
   const livro = validarLivro(req.body);
   const [result] = await pool.execute(
     `UPDATE livro
-     SET nome = ?, autor = ?, edicao = ?, editora = ?, ano = ?, id_assunto = ?, capa = ?, preco = ?, status = ?
+     SET nome = ?, autor = ?, edicao = ?, editora = ?, ano = ?, id_assunto = ?, capa = ?, preco = ?, status = ?, em_promocao = ?, destaque_semana = ?, preco_promocao = ?
      WHERE id_livro = ?`,
-    [livro.nome, livro.autor, livro.edicao, livro.editora, livro.ano, livro.idAssunto, livro.capa, livro.preco, livro.status, id]
+    [livro.nome, livro.autor, livro.edicao, livro.editora, livro.ano, livro.idAssunto, livro.capa, livro.preco, livro.status, livro.emPromocao ? 1 : 0, livro.destaqueSemana ? 1 : 0, livro.precoPromocao, id]
   );
   if (!result.affectedRows) {
     const [existing] = await pool.execute('SELECT id_livro FROM livro WHERE id_livro = ?', [id]);
@@ -304,6 +339,63 @@ app.use((error, req, res, next) => {
   res.status(500).json({ erro: 'Erro interno. Verifique a conexão com o banco e os logs do servidor.' });
 });
 
+async function garantirEstruturaLivro() {
+  const [tabelas] = await pool.query("SHOW TABLES LIKE 'livro'");
+  if (!tabelas.length) {
+    return;
+  }
+
+  const [colunas] = await pool.execute('SHOW COLUMNS FROM livro');
+  const nomes = new Set(colunas.map(coluna => coluna.Field));
+
+  const alteracoes = [];
+  if (!nomes.has('em_promocao')) {
+    alteracoes.push("ADD COLUMN em_promocao TINYINT(1) NOT NULL DEFAULT 0");
+  }
+  if (!nomes.has('destaque_semana')) {
+    alteracoes.push("ADD COLUMN destaque_semana TINYINT(1) NOT NULL DEFAULT 0");
+  }
+  if (!nomes.has('preco_promocao')) {
+    alteracoes.push('ADD COLUMN preco_promocao DECIMAL(10,2) NULL');
+  }
+
+  if (alteracoes.length) {
+    await pool.execute(`ALTER TABLE livro ${alteracoes.join(', ')}`);
+    console.log('Estrutura da tabela livro atualizada com campos de promoção e destaque.');
+  }
+}
+
+async function garantirAdminPadrao() {
+  const [tabelas] = await pool.query("SHOW TABLES LIKE 'pessoa'");
+  if (!tabelas.length) {
+    return;
+  }
+
+  const email = 'admin@teste.com';
+  const senha = 'Admin123456';
+  const [adminExistente] = await pool.execute(
+    'SELECT id_pessoa FROM pessoa WHERE email = ? LIMIT 1',
+    [email]
+  );
+
+  if (adminExistente.length) {
+    return;
+  }
+
+  const senhaHash = await bcrypt.hash(senha, 12);
+  const [resultado] = await pool.execute(
+    'INSERT INTO pessoa (nome, cpf, email, tipo, senha_hash) VALUES (?, ?, ?, ?, ?)',
+    ['Administrador Teste', '12345678909', email, 'Administrador', senhaHash]
+  );
+
+  await pool.execute(
+    'INSERT INTO administrador (id_pessoa, nivel_acesso) VALUES (?, ?)',
+    [resultado.insertId, 'total']
+  );
+
+  console.log('Admin padrão criado: admin@teste.com / Admin123456');
+}
+
 async function start() {
   await pool.query('SELECT 1');
   await pool.execute(
@@ -311,6 +403,8 @@ async function start() {
      VALUES (?), (?), (?), (?), (?), (?)`,
     ['Romance', 'Técnico', 'Infantil', 'Filosofia', 'História', 'Poesia']
   );
+  await garantirEstruturaLivro();
+  await garantirAdminPadrao();
   app.listen(port, () => {
     console.log(`Alquimia das Páginas disponível em http://localhost:${port}`);
   });

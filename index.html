@@ -23,6 +23,8 @@
         <nav>
             <a href="index.html" class="ativo">Início</a>
             <a href="catalogo.html">Catálogo</a>
+            <a href="#novidades">Novidades</a>
+            <a href="#promocoes">Promoções</a>
             <a href="#como-comprar">Como comprar</a>
             <a href="#sobre">O sebo</a>
             <a href="#contato">Contato</a>
@@ -58,6 +60,51 @@
     </div>
 </div>
 
+<section class="secao secao-comemorativa" id="novidades">
+    <div class="container">
+        <div class="secao-titulo">
+            <div class="ornamento">DESTAQUES DA QUINZENA</div>
+            <h2>Novidades para datas especiais</h2>
+            <p>Seleções curtas para presentear, comemorar e renovar a estante com histórias que fazem sentido para cada momento.</p>
+        </div>
+
+        <div class="cards-comemorativas">
+            <article class="card-comemorativa card-rosa">
+                <span class="badge">Dia dos Namorados</span>
+                <h3>Romances para presentear</h3>
+                <p>Histórias delicadas, apaixonantes e humanas para quem gosta de dar um livro com sentimento.</p>
+                <a href="catalogo.html?assunto=1">Ver sugestões</a>
+            </article>
+            <article class="card-comemorativa card-dourada">
+                <span class="badge">Dia das Mães</span>
+                <h3>Leituras que abraçam</h3>
+                <p>Livros inspiradores, poéticos e emocionantes para celebrar o carinho e a memória.</p>
+                <a href="catalogo.html?assunto=6">Explorar</a>
+            </article>
+            <article class="card-comemorativa card-terracota">
+                <span class="badge">Primavera</span>
+                <h3>Novos achados da estação</h3>
+                <p>Uma seleção de títulos frescos e acolhedores para começar a temporada com boa leitura.</p>
+                <a href="catalogo.html?assunto=3">Conhecer</a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="secao" id="promocoes">
+    <div class="container">
+        <div class="secao-titulo">
+            <div class="ornamento">OFERTAS E COMEMORAÇÃO</div>
+            <h2>Livros em promoção</h2>
+            <p>Pequenos descontos para datas comemorativas, com títulos selecionados para surpreender com leitura e carinho.</p>
+        </div>
+
+        <div class="grid-livros promo-grid" id="livrosPromocao" data-tipo="promocao" aria-live="polite"></div>
+
+        <div class="secao-link"><a href="catalogo.html">Ver todos os livros →</a></div>
+    </div>
+</section>
+
 <section class="secao">
     <div class="container">
         <div class="secao-titulo">
@@ -66,7 +113,7 @@
             <p>Uma pequena seleção de livros esperando por uma nova casa.</p>
         </div>
 
-        <div class="grid-livros" id="livrosDestaque" aria-live="polite"></div>
+        <div class="grid-livros" id="livrosDestaque" data-tipo="destaque" aria-live="polite"></div>
         <p id="avisoLivros" class="aviso-livros" role="status" hidden></p>
         <div class="secao-link"><a href="catalogo.html">Ver todos os livros →</a></div>
     </div>
@@ -76,28 +123,28 @@
     <div class="container">
         <div class="secao-titulo">
             <div class="ornamento">ATENDIMENTO DIRETO E LOCAL</div>
-            <h2>Como comprar</h2>
-            <p>Você escolhe o livro no site e combina os detalhes diretamente com o sebo. Não há checkout nem pagamento online.</p>
+            <h2>Como encontrar seu livro</h2>
+            <p>Explore o acervo, pesquise por título ou assunto e converse diretamente com o sebo para confirmar disponibilidade e retirar ou receber o exemplar.</p>
         </div>
         <ol class="passos-compra">
             <li>
                 <span class="passo-numero" aria-hidden="true">1</span>
-                <h3>Encontre seu livro</h3>
-                <p>Pesquise no catálogo por título, autor ou assunto e abra a página do exemplar.</p>
+                <h3>Navegue pelo acervo</h3>
+                <p>Veja os títulos do sebo, filtre por assunto e descubra livros que combinam com seu gosto.</p>
             </li>
             <li>
                 <span class="passo-numero" aria-hidden="true">2</span>
                 <h3>Confirme pelo WhatsApp</h3>
-                <p>Envie uma mensagem sobre o livro e confirme a disponibilidade com a equipe.</p>
+                <p>Envie uma mensagem com o livro escolhido e tire dúvidas sobre disponibilidade, preço e retirada.</p>
             </li>
             <li>
                 <span class="passo-numero" aria-hidden="true">3</span>
-                <h3>Combine com o sebo</h3>
-                <p>O pagamento e a forma de receber ou retirar o livro são combinados diretamente com a loja.</p>
+                <h3>Combine a entrega</h3>
+                <p>O sebo orienta a melhor forma de receber ou retirar o livro pessoalmente, sem qualquer checkout online.</p>
             </li>
         </ol>
         <div class="secao-link">
-            <a class="btn-whatsapp" data-whatsapp="geral" href="#" target="_blank" rel="noopener">Tirar dúvidas pelo WhatsApp</a>
+            <a class="btn-whatsapp" data-whatsapp="geral" href="#" target="_blank" rel="noopener">Falar com o sebo</a>
         </div>
     </div>
 </section>
